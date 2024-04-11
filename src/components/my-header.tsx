@@ -10,6 +10,8 @@ import {
   ShoppingCart,
   Users,
   Home,
+  ArrowRightLeft,
+  FolderKanban,
 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -32,12 +34,20 @@ import {
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { ModeToggle } from "@/components/theme-toggle-btn";
+import { useAuth } from "#srchooks/use-auth.ts";
+import { useRouter } from "next/navigation";
 
 const AppHeader = ({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) => {
+  const router = useRouter();
+  const auth = useAuth() as any;
+  const handleLogout = async () => {
+    await auth.signOut();
+    router.push("/");
+  };
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-muted/40 md:block">
@@ -55,13 +65,13 @@ const AppHeader = ({
           <div className="flex-1">
             <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
               <Link
-                href="#"
+                href="/dashboard"
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
               >
-                <Home className="h-4 w-4" />
+                <LineChart className="h-4 w-4" />
                 Dashboard
               </Link>
-              <Link
+              {/* <Link
                 href="#"
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
               >
@@ -70,27 +80,27 @@ const AppHeader = ({
                 <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full">
                   6
                 </Badge>
-              </Link>
+              </Link> */}
               <Link
-                href="#"
+                href="/projects"
                 className="flex items-center gap-3 rounded-lg bg-muted px-3 py-2 text-primary transition-all hover:text-primary"
               >
-                <Package className="h-4 w-4" />
-                Products{" "}
+                <FolderKanban className="h-5 w-5" />
+                Projects
               </Link>
               <Link
-                href="#"
+                href="/memberships"
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
               >
-                <Users className="h-4 w-4" />
-                Customers
+                <ShoppingCart className="h-5 w-5" />
+                Memberships
               </Link>
               <Link
-                href="#"
+                href="/transactions"
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
               >
-                <LineChart className="h-4 w-4" />
-                Analytics
+                <ArrowRightLeft className="h-5 w-5" />
+                Transactions
               </Link>
             </nav>
           </div>
@@ -132,45 +142,45 @@ const AppHeader = ({
                   className="flex items-center gap-2 text-lg font-semibold"
                 >
                   <Package2 className="h-6 w-6" />
-                  <span className="sr-only">Acme Inc</span>
+                  <span className="sr-only">Oraganization Name</span>
                 </Link>
                 <Link
-                  href="#"
-                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
+                  href="/dashboard"
+                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3  py-2 text-muted-foreground hover:text-foreground"
                 >
-                  <Home className="h-5 w-5" />
+                  <LineChart className="h-5 w-5" />
                   Dashboard
                 </Link>
-                <Link
+                {/* <Link
                   href="#"
-                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl bg-muted px-3 py-2 text-foreground hover:text-foreground"
+                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl bg-muted  px-3 py-2 text-foreground hover:text-foreground"
                 >
                   <ShoppingCart className="h-5 w-5" />
                   Orders
                   <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full">
                     6
                   </Badge>
-                </Link>
+                </Link> */}
                 <Link
-                  href="#"
+                  href="/projects"
                   className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
                 >
-                  <Package className="h-5 w-5" />
-                  Products
+                  <FolderKanban className="h-5 w-5" />
+                  Projects
                 </Link>
                 <Link
-                  href="#"
+                  href="/memberships"
                   className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
                 >
-                  <Users className="h-5 w-5" />
-                  Customers
+                  <ShoppingCart className="h-5 w-5" />
+                  Memberships
                 </Link>
                 <Link
-                  href="#"
+                  href="/transactions"
                   className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
                 >
-                  <LineChart className="h-5 w-5" />
-                  Analytics
+                  <ArrowRightLeft className="h-5 w-5" />
+                  Transactions
                 </Link>
               </nav>
               <div className="mt-auto">
@@ -214,10 +224,10 @@ const AppHeader = ({
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Settings</DropdownMenuItem>
+              {/* <DropdownMenuItem>Settings</DropdownMenuItem>
               <DropdownMenuItem>Support</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Logout</DropdownMenuItem>
+              <DropdownMenuSeparator /> */}
+              <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </header>
