@@ -12,6 +12,8 @@ import {
 import { Check, Linkedin } from "lucide-react";
 import { LightBulbIcon } from "./Icons";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
+import Image from "next/image";
+import Link from "next/link";
 
 export const HeroCards = () => {
   return (
@@ -39,7 +41,7 @@ export const HeroCards = () => {
       {/* Team */}
       <Card className="absolute right-[20px] top-4 w-80 flex flex-col justify-center items-center drop-shadow-xl shadow-black/10 dark:shadow-white/10">
         <CardHeader className="mt-8 flex justify-center items-center pb-2">
-          <img
+          <Image
             src="https://i.pravatar.cc/150?img=58"
             alt="user avatar"
             className="absolute grayscale-[0%] -top-12 rounded-full w-24 h-24 aspect-square object-cover"
@@ -59,7 +61,7 @@ export const HeroCards = () => {
 
         <CardFooter>
           <div>
-            <a
+            <Link
               href="https://github.com/leoMirandaa"
               target="_blank"
               className={buttonVariants({
@@ -69,8 +71,8 @@ export const HeroCards = () => {
             >
               <span className="sr-only">Github icon</span>
               <GitHubLogoIcon className="w-5 h-5" />
-            </a>
-            <a
+            </Link>
+            <Link
               href="https://twitter.com/leo_mirand4"
               target="_blank"
               className={buttonVariants({
@@ -88,9 +90,9 @@ export const HeroCards = () => {
                 <title>X</title>
                 <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
               </svg>
-            </a>
+            </Link>
 
-            <a
+            <Link
               href="https://www.linkedin.com/"
               target="_blank"
               className={buttonVariants({
@@ -100,7 +102,7 @@ export const HeroCards = () => {
             >
               <span className="sr-only">Linkedin icon</span>
               <Linkedin size="20" />
-            </a>
+            </Link>
           </div>
         </CardFooter>
       </Card>

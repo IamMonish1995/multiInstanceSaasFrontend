@@ -14,7 +14,7 @@ import Image from "next/image";
 interface FeatureProps {
   title: string;
   description: string;
-  image: string;
+  image: any;
 }
 
 const features: FeatureProps[] = [
