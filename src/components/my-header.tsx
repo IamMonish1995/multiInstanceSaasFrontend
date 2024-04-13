@@ -35,7 +35,7 @@ import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { ModeToggle } from "@/components/theme-toggle-btn";
 import { useAuth } from "#srchooks/use-auth.ts";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 const AppHeader = ({
   children,
@@ -43,6 +43,7 @@ const AppHeader = ({
   children: React.ReactNode;
 }>) => {
   const router = useRouter();
+  const pathname = usePathname();
   const auth = useAuth() as any;
   const handleLogout = async () => {
     await auth.signOut();
