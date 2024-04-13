@@ -51,7 +51,7 @@ const AppHeader = ({
   };
   const navList = [
     { label: "Dashboard", path: "/dashboard", icon: LineChart },
-    { label: "Projects", path: "/projects", icon: FolderKanban },
+    { label: "Instances", path: "/instances", icon: FolderKanban },
     { label: "Memberships", path: "/memberships", icon: ShoppingCart },
     { label: "Transactions", path: "/transactions", icon: ArrowRightLeft },
   ];

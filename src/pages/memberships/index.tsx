@@ -1,9 +1,15 @@
+import { Pricing } from "#srccomponents/Pricing.tsx";
 import { DashBoardLayout } from "#srclayouts/dashboard/layout.tsx";
 
 const Page = () => {
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
-      Memberships
+      <div className="flex items-center">
+        <h1 className="text-lg font-semibold md:text-2xl">MemberShips</h1>
+      </div>
+      <div className="-mt-24">
+        <Pricing />
+      </div>
     </main>
   );
 };
