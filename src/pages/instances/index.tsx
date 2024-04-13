@@ -9,10 +9,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { DollarSign } from "lucide-react";
 const Page = () => {
-  const [Instances, setInstances] = useState([
-    1, 2
-  ]);
+  const [Instances, setInstances] = useState([1, 2, 2, 2]);
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
       <div className="flex items-center">
@@ -34,29 +33,19 @@ const Page = () => {
           </div>
         </div>
       ) : (
-        <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
+        <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
           {Instances.map((Instance, key) => (
-            <Card
-              key={key}
-              className="w-72 drop-shadow-xl shadow-black/10 dark:shadow-white/10"
-            >
-              <CardHeader>
-                <CardTitle className="flex item-center justify-center">
-                  Instance{" "}{key+1}
+            <Card key={key} x-chunk="dashboard-01-chunk-0">
+              <CardHeader className="flex flex-row items-center justify-center space-y-0 pb-2">
+                <CardTitle className="text-sm justify-center font-medium">
+                  <div className="text-2xl font-bold">Instance Name</div>
                 </CardTitle>
-                <CardDescription>
-                  Lorem ipsum dolor sit, amet ipsum consectetur adipisicing
-                  elit.
-                </CardDescription>
               </CardHeader>
-
-              <hr className="w-4/5 m-auto mb-4" />
-
-              <CardFooter className="flex justify-center">
-                <div className="space-y-4 ">
-                  <Button className="w-full">Visit</Button>
-                </div>
-              </CardFooter>
+              <CardContent>
+                <Button variant="link" className="w-full">
+                  Visit
+                </Button> 
+              </CardContent>
             </Card>
           ))}
         </div>

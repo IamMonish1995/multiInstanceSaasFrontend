@@ -1,12 +1,16 @@
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
+import { loginorganization } from "#srcservices/organizationRequest.ts";
+import { useRouter } from "next/navigation";
 
 export const AuthContext = createContext({ undefined });
 
 export const AuthProvider = (props: any) => {
+  const router = useRouter();
   const { children } = props;
   const initialized = useRef(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const initialize = async () => {
     // Prevent from calling twice in development mode with React.StrictMode enabled
@@ -17,7 +21,9 @@ export const AuthProvider = (props: any) => {
     initialized.current = true;
 
     try {
-      setIsAuthenticated(window.sessionStorage.getItem("authenticated") === "true");      
+      setIsAuthenticated(
+        window.sessionStorage.getItem("token") != null
+      );
     } catch (err) {
       console.error(err);
     }
@@ -39,28 +45,45 @@ export const AuthProvider = (props: any) => {
   );
 
   const signIn = async (email: any, password: any) => {
+    return new Promise(async (resolve, reject) => {
     try {
-      window.sessionStorage.setItem("authenticated", "true");
-      setIsAuthenticated(true)     
-      console.log(isAuthenticated);
+      await loginorganization({ adminemail: email, adminpassword: password })
+        .then((res) => {
+          if(res.status == "success"){
+            window.sessionStorage.setItem("token", res.result);
+            setIsAuthenticated(true);
+            router.push("/dashboard");
+            resolve(res.message)
+          }else{
+            reject(res.message)
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          reject(err)
+        });
     } catch (err) {
       console.error(err);
+      reject(reject)
     }
+    })
+    
     // fetch user data
 
     // set to session storage
   };
 
-  const signUp = async (email: any, name: any, password: any) => {
+  const signUp = async ({ email, name, password }: any) => {
     // create user
   };
 
   const signOut = () => {
-    window.sessionStorage.removeItem("authenticated");
-    setIsAuthenticated(false)
+    window.sessionStorage.clear();
+    setIsAuthenticated(false);
   };
 
   const value: any = {
+    isLoading, setIsLoading,
     isAuthenticated,
     signIn,
     signUp,

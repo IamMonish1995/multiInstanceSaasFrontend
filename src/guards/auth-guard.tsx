@@ -20,7 +20,7 @@ export const AuthGuard = (props: any) => {
 
     ignore.current = true;
     let isAuthenticated =
-      window.sessionStorage.getItem("authenticated") === "true";    
+      window.sessionStorage.getItem("token") != null;    
     if (!isAuthenticated) {
       console.log("Not authenticated, redirecting");
       router

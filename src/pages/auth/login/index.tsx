@@ -22,18 +22,17 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { useRouter } from "next/navigation";
 import { useAuth } from "#srchooks/use-auth.ts";
 import { AuthLayout } from "#srclayouts/auth/layout.tsx";
+import toast, { Toaster } from "react-hot-toast";
 
 const Page = () => {
-  const router = useRouter();
   const auth = useAuth() as any;
   const formSchema = z.object({
     email: z.string().email({
       message: "Email is not valid",
     }),
-    password: z.string().min(8, {
+    password: z.string().min(1, {
       message: "password must be at least 8 characters.",
     }),
   });
@@ -49,9 +48,19 @@ const Page = () => {
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      await auth.signIn(values.email, values.password);
-      router.push("/dashboard");
-    } catch (err) {}
+      if (auth.isLoading != true) {
+        auth.setIsLoading(true);
+        toast.promise(auth.signIn(values.email, values.password), {
+          loading: "Loading...",
+          success: (data: any) => <b>{data}</b>,
+          error: (err: any) => <b>{err}</b>,
+        });
+        auth.setIsLoading(false);
+      }
+    } catch (err) {
+      auth.setIsLoading(false);
+      console.log(err);
+    }
   }
   return (
     <main className="flex flex-1 flex-col justify-center h-screen items-center gap-4 p-4 lg:gap-6 lg:p-6">

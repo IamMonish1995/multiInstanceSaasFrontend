@@ -29,7 +29,12 @@ import { Button } from "#srccomponents/ui/button.tsx";
 import Link from "next/link";
 import { Badge } from "#srccomponents/ui/badge.tsx";
 import { Avatar, AvatarFallback, AvatarImage } from "#srccomponents/ui/avatar.tsx";
-const Page = () => {
+import { useEffect } from "react";
+import { decryptJSON } from "#srclib/utils.ts";
+const Page = ({ JWT_SECRET_KEY }:any) => {
+  useEffect(()=>{
+    console.log(decryptJSON("U2FsdGVkX19EDA35Rha86ZmFQ+F+ygUkIIB101EP/wB9t9X2XMn6layy2IDPk9CWXFvN3MA/LjscltaLBA0SPj0LmoBLp2EYnnC8PP77qMkSiHOqBf8ikjKDbV+53yMVQeGf1FcdFkKl8bpFnQ6P7OISMU9VXMJSwuibwBqlaVfHsv3FgzrSSVRVvVEO10J2TfsDvP0bbW+Uoz44cU7ZR6av39IaAVB18+Idcqt+kS2+YHcBIzb2eWam0M3ceez1C7A/QAEFWRLeuxNXd5A975QE1Nun/MDUmW/xPpUAyNIUp3/OQkzvROF+RxWG4TsZ4bnqxJdxo1m7ynLuhhb7VZ7+QAUUOML1rZe0wdahprBWKebAgiTYWS0Ee51ucAPj",JWT_SECRET_KEY));    
+  },[])
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
       <div className="flex items-center">
@@ -320,3 +325,15 @@ Page.getLayout = (page: any) => <DashBoardLayout>{page}</DashBoardLayout>;
 
 export default Page;
 
+// Function to fetch environment variables at server-side
+export async function getServerSideProps() {
+  // Fetch environment variables
+  const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
+
+  // Pass environment variables as props to the component
+  return {
+    props: {
+      JWT_SECRET_KEY,
+    },
+  };
+}
