@@ -10,6 +10,7 @@ export const AuthProvider = (props: any) => {
   const { children } = props;
   const initialized = useRef(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [organizationData, setOrganizationData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const initialize = async () => {
@@ -83,6 +84,7 @@ export const AuthProvider = (props: any) => {
   };
 
   const value: any = {
+    organizationData, setOrganizationData,
     isLoading, setIsLoading,
     isAuthenticated,
     signIn,

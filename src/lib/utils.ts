@@ -27,7 +27,7 @@ export function decryptJSON(ciphertext: any,key:any) {
   return decryptedObj;
 }
 
-export const decodeToken = (token:string)=>{
+export const decodeToken = (token:any)=>{
   const decodedData = jwtDecode<JwtPayload>(token)
   return decodedData
 }
