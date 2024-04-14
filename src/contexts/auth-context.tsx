@@ -10,6 +10,7 @@ export const AuthProvider = (props: any) => {
   const { children } = props;
   const initialized = useRef(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [token, setToken] = useState("");
   const [organizationData, setOrganizationData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -22,9 +23,9 @@ export const AuthProvider = (props: any) => {
     initialized.current = true;
 
     try {
-      setIsAuthenticated(
-        window.sessionStorage.getItem("token") != null
-      );
+      let checktoken = window.sessionStorage.getItem("token") as string
+      setIsAuthenticated(window.sessionStorage.getItem("token") != null);
+      setToken(checktoken) ;
     } catch (err) {
       console.error(err);
     }
@@ -47,28 +48,29 @@ export const AuthProvider = (props: any) => {
 
   const signIn = async (email: any, password: any) => {
     return new Promise(async (resolve, reject) => {
-    try {
-      await loginorganization({ adminemail: email, adminpassword: password })
-        .then((res) => {
-          if(res.status == "success"){
-            window.sessionStorage.setItem("token", res.result);
-            setIsAuthenticated(true);
-            router.push("/dashboard");
-            resolve(res.message)
-          }else{
-            reject(res.message)
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-          reject(err)
-        });
-    } catch (err) {
-      console.error(err);
-      reject(reject)
-    }
-    })
-    
+      try {
+        await loginorganization({ adminemail: email, adminpassword: password })
+          .then((res) => {
+            if (res.status == "success") {
+              window.sessionStorage.setItem("token", res.result);
+              setIsAuthenticated(true);
+              setToken(res.result);
+              router.push("/dashboard");
+              resolve(res.message);
+            } else {
+              reject(res.message);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+            reject(err);
+          });
+      } catch (err) {
+        console.error(err);
+        reject(reject);
+      }
+    });
+
     // fetch user data
 
     // set to session storage
@@ -81,15 +83,19 @@ export const AuthProvider = (props: any) => {
   const signOut = () => {
     window.sessionStorage.clear();
     setIsAuthenticated(false);
+    setToken("");
   };
 
   const value: any = {
-    organizationData, setOrganizationData,
-    isLoading, setIsLoading,
+    organizationData,
+    setOrganizationData,
+    isLoading,
+    setIsLoading,
     isAuthenticated,
     signIn,
     signUp,
     signOut,
+    token, setToken
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

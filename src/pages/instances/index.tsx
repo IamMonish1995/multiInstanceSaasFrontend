@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import TopPageNavigation from "#srccomponents/TopPageNavigation.tsx";
 import AddItemDialogue from "#srccomponents/AddItemDialogue.tsx";
+import AddInstanceForm from "#srccomponents/Instance/addForm.tsx";
 const Page = () => {
   const [Instances, setInstances] = useState([1, 2, 2, 2]);
   const [AddModalShow, setAddModalShow] = useState(false);
@@ -44,7 +45,7 @@ const Page = () => {
       <div className="flex items-center">
         <h1 className="text-lg font-semibold md:text-2xl">Instances</h1>
       </div>
-      <AddItemDialogue open={AddModalShow} setIsOpen={setAddModalShow} />
+      <AddItemDialogue open={AddModalShow} setIsOpen={setAddModalShow} content={<AddInstanceForm/>}/>
       {Instances && Instances.length == 0 ? (
         <div
           className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm"
