@@ -48,7 +48,7 @@ export const Navbar = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   useEffect(() => {
-    let tempAuth = window.sessionStorage.getItem("authenticated") === "true";
+    let tempAuth = window.sessionStorage.getItem("token") != null;
     if (window) {
       setIsAuthenticated(tempAuth);
     }
