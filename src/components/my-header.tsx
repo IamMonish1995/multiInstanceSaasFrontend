@@ -12,6 +12,7 @@ import {
   Home,
   ArrowRightLeft,
   FolderKanban,
+  BookCopy,
 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -51,6 +52,7 @@ const AppHeader = ({
   };
   const navList = [
     { label: "Dashboard", path: "/dashboard", icon: LineChart },
+    { label: "Projects", path: "/projects", icon: BookCopy },
     { label: "Instances", path: "/instances", icon: FolderKanban },
     { label: "Memberships", path: "/memberships", icon: ShoppingCart },
     { label: "Transactions", path: "/transactions", icon: ArrowRightLeft },
@@ -62,7 +64,9 @@ const AppHeader = ({
           <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
             <Link href="/" className="flex items-center gap-2 font-semibold">
               <Package2 className="h-6 w-6" />
-              <span className="">{auth.organizationData?.organizationname}</span>
+              <span className="">
+                {auth.organizationData?.organizationname}
+              </span>
             </Link>
             {/* <Button variant="outline" size="icon" className="ml-auto h-8 w-8">
               <Bell className="h-4 w-4" />
