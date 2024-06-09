@@ -18,6 +18,8 @@ import { LineChart, Menu, UserIcon } from "lucide-react";
 import { LogoIcon } from "./Icons";
 import { ModeToggle } from "./theme-toggle-btn";
 import Link from "next/link";
+import { SignInButton, SignedOut, useUser } from "@clerk/nextjs";
+import { useAuth } from "#srchooks/use-auth.ts";
 
 interface RouteProps {
   href: string;
@@ -45,12 +47,11 @@ const routeList: RouteProps[] = [
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-
+  const auth = useAuth() as any;
   useEffect(() => {
     let tempAuth = window.sessionStorage.getItem("token") != null;
     if (window) {
-      setIsAuthenticated(tempAuth);
+      auth.setIsAuthenticated(tempAuth);
     }
   }, []);
 
@@ -96,26 +97,33 @@ export const Navbar = () => {
                       {label}
                     </Link>
                   ))}
-                  {isAuthenticated ? (
-                    <Link
-                      href="/dashboard"
-                      className={`w-[110px] border ${buttonVariants({
-                        variant: "secondary",
-                      })}`}
-                    >
-                      <LineChart className="mr-2 w-5 h-5" />
-                      Go To Dashboard
-                    </Link>
+                  {auth.isAuthenticated ? (
+                    <>
+                      <Link
+                        href="/dashboard"
+                        className={`w-[110px] border ${buttonVariants({
+                          variant: "secondary",
+                        })}`}
+                      >
+                        <LineChart className="mr-2 w-5 h-5" />
+                        Go To Dashboard
+                      </Link>
+                    </>
                   ) : (
-                    <Link
-                      href="/auth/login"
-                      className={`w-[110px] border ${buttonVariants({
-                        variant: "secondary",
-                      })}`}
-                    >
-                      <UserIcon className="mr-2 w-5 h-5" />
-                      Login
-                    </Link>
+                    <>
+                      <Link
+                        href="sign-in"
+                        className={`w-[110px] border ${buttonVariants({
+                          variant: "secondary",
+                        })}`}
+                      >
+                        <UserIcon className="mr-2 w-5 h-5" />
+                        Login
+                      </Link>
+                      <SignedOut>
+                        <SignInButton />
+                      </SignedOut>
+                    </>
                   )}
                 </nav>
               </SheetContent>
@@ -138,7 +146,7 @@ export const Navbar = () => {
           </nav>
 
           <div className="hidden md:flex gap-2">
-            {isAuthenticated ? (
+            {auth.isAuthenticated ? (
               <Link
                 href="/dashboard"
                 className={`border ${buttonVariants({ variant: "secondary" })}`}
@@ -147,13 +155,17 @@ export const Navbar = () => {
                 Go To Dashboard
               </Link>
             ) : (
-              <Link
-                href="/auth/login"
-                className={`border ${buttonVariants({ variant: "secondary" })}`}
-              >
-                <UserIcon className="mr-2 w-5 h-5" />
-                Login
-              </Link>
+              <SignedOut>
+                <Link
+                  href="sign-in"
+                  className={`border ${buttonVariants({
+                    variant: "secondary",
+                  })}`}
+                >
+                  <UserIcon className="mr-2 w-5 h-5" />
+                  Login
+                </Link>
+              </SignedOut>
             )}
 
             <ModeToggle />

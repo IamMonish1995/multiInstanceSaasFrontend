@@ -37,6 +37,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { ModeToggle } from "@/components/theme-toggle-btn";
 import { useAuth } from "#srchooks/use-auth.ts";
 import { usePathname, useRouter } from "next/navigation";
+import { SignedIn, UserButton } from "@clerk/nextjs";
 
 const AppHeader = ({
   children,
@@ -46,10 +47,7 @@ const AppHeader = ({
   const router = useRouter();
   const pathname = usePathname();
   const auth = useAuth() as any;
-  const handleLogout = async () => {
-    await auth.signOut();
-    router.push("/");
-  };
+
   const navList = [
     { label: "Dashboard", path: "/dashboard", icon: LineChart },
     { label: "Projects", path: "/projects", icon: BookCopy },
@@ -213,7 +211,10 @@ const AppHeader = ({
             </form>
           </div>
           <ModeToggle />
-          <DropdownMenu>
+          <SignedIn>
+            <UserButton afterSignOutUrl="/" />
+          </SignedIn>
+          {/* <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="secondary" size="icon" className="rounded-full">
                 <CircleUser className="h-5 w-5" />
@@ -221,14 +222,14 @@ const AppHeader = ({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              {/* <DropdownMenuLabel>My Account</DropdownMenuLabel> */}
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              {/* <DropdownMenuItem>Settings</DropdownMenuItem>
+              <DropdownMenuItem>Settings</DropdownMenuItem>
               <DropdownMenuItem>Support</DropdownMenuItem>
-              <DropdownMenuSeparator /> */}
+              <DropdownMenuSeparator />
               <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
             </DropdownMenuContent>
-          </DropdownMenu>
+          </DropdownMenu> */}
         </header>
         {children}
       </div>

@@ -1,40 +1,41 @@
-import { createContext, useContext, useEffect, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { loginorganization } from "#srcservices/organizationRequest.ts";
 import { useRouter } from "next/navigation";
+import { useUser } from "@clerk/nextjs";
+import toast from "react-hot-toast";
 
 export const AuthContext = createContext({ undefined });
 
 export const AuthProvider = (props: any) => {
   const router = useRouter();
   const { children } = props;
-  const initialized = useRef(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [token, setToken] = useState("");
   const [organizationData, setOrganizationData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  const { isSignedIn, user } = useUser();
   const initialize = async () => {
-    // Prevent from calling twice in development mode with React.StrictMode enabled
-    if (initialized.current) {
-      return;
-    }
-
-    initialized.current = true;
-
-    try {
-      let checktoken = window.sessionStorage.getItem("token") as string
-      setIsAuthenticated(window.sessionStorage.getItem("token") != null);
-      setToken(checktoken) ;
-    } catch (err) {
-      console.error(err);
-    }
-
-    if (isAuthenticated) {
-      // get userdetails
-      // set to session storage
-    } else {
-      initialize();
+    if (isSignedIn && user && !isAuthenticated) {
+      try {
+        if (isLoading != true) {
+          setIsLoading(true);
+          toast.promise(signIn("monishbarse9@gmail.com", "abcdefg"), {
+            loading: "Loading...",
+            success: (data: any) => <b>{data}</b>,
+            error: (err: any) => <b>{err}</b>,
+          });
+          setIsLoading(false);
+        }
+      } catch (err) {
+        setIsLoading(false);
+        console.log(err);
+      }
+    }else{
+      if(!isSignedIn){
+        signOut()
+      }
     }
   };
 
@@ -42,8 +43,7 @@ export const AuthProvider = (props: any) => {
     () => {
       initialize();
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [user]
   );
 
   const signIn = async (email: any, password: any) => {
@@ -70,9 +70,7 @@ export const AuthProvider = (props: any) => {
         reject(reject);
       }
     });
-
     // fetch user data
-
     // set to session storage
   };
 
@@ -92,6 +90,7 @@ export const AuthProvider = (props: any) => {
     isLoading,
     setIsLoading,
     isAuthenticated,
+    setIsAuthenticated,
     signIn,
     signUp,
     signOut,

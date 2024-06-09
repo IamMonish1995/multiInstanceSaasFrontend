@@ -4,7 +4,10 @@ import { Inter } from "next/font/google";
 import "#public/globals.css";
 import { AuthProvider } from "#srccontexts/auth-context.tsx";
 const inter = Inter({ subsets: ["latin"] });
-import { Toaster } from 'react-hot-toast';
+import { Toaster } from "react-hot-toast";
+import {
+  ClerkProvider,
+} from "@clerk/nextjs";
 
 export const metadata: Metadata = {
   title: "Multi Instance Saas",
@@ -16,15 +19,17 @@ export default function App({ Component, pageProps }: any) {
 
   return (
     <div className={inter.className}>
-      <Toaster/>
-      <ThemeProvider
-        attribute="class"
-        defaultTheme="system"
-        enableSystem
-        disableTransitionOnChange
-      >
-        <AuthProvider>{getLayout(<Component {...pageProps} />)}</AuthProvider>
-      </ThemeProvider>
+      <Toaster />
+      <ClerkProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <AuthProvider>{getLayout(<Component {...pageProps} />)}</AuthProvider>
+        </ThemeProvider>
+      </ClerkProvider>
     </div>
   );
 }
