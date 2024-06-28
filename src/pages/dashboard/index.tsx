@@ -1,4 +1,4 @@
-import { DashBoardLayout } from "#srclayouts/dashboard/layout.tsx";
+import { DashBoardLayout } from "@/layouts/dashboard/layout";
 import {
   Table,
   TableBody,
@@ -25,14 +25,14 @@ import {
   Search,
   Users,
 } from "lucide-react";
-import { Button } from "#srccomponents/ui/button.tsx";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Badge } from "#srccomponents/ui/badge.tsx";
+import { Badge } from "@/components/ui/badge";
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from "#srccomponents/ui/avatar.tsx";
+} from "@/components/ui/avatar";
 const Page = () => {
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
@@ -224,7 +224,7 @@ const Page = () => {
           <CardContent className="grid gap-8">
             <div className="flex items-center gap-4">
               <Avatar className="hidden h-9 w-9 sm:flex">
-                <AvatarImage src="/avatars/01.png" alt="Avatar" />
+                {/* <AvatarImage src="/avatars/01.png" alt="Avatar" /> */}
                 <AvatarFallback>OM</AvatarFallback>
               </Avatar>
               <div className="grid gap-1">
@@ -239,7 +239,7 @@ const Page = () => {
             </div>
             <div className="flex items-center gap-4">
               <Avatar className="hidden h-9 w-9 sm:flex">
-                <AvatarImage src="/avatars/02.png" alt="Avatar" />
+                {/* <AvatarImage src="/avatars/02.png" alt="Avatar" /> */}
                 <AvatarFallback>JL</AvatarFallback>
               </Avatar>
               <div className="grid gap-1">
@@ -252,7 +252,7 @@ const Page = () => {
             </div>
             <div className="flex items-center gap-4">
               <Avatar className="hidden h-9 w-9 sm:flex">
-                <AvatarImage src="/avatars/03.png" alt="Avatar" />
+                {/* <AvatarImage src="/avatars/03.png" alt="Avatar" /> */}
                 <AvatarFallback>IN</AvatarFallback>
               </Avatar>
               <div className="grid gap-1">
@@ -267,7 +267,7 @@ const Page = () => {
             </div>
             <div className="flex items-center gap-4">
               <Avatar className="hidden h-9 w-9 sm:flex">
-                <AvatarImage src="/avatars/04.png" alt="Avatar" />
+                {/* <AvatarImage src="/avatars/04.png" alt="Avatar" /> */}
                 <AvatarFallback>WK</AvatarFallback>
               </Avatar>
               <div className="grid gap-1">
@@ -278,7 +278,7 @@ const Page = () => {
             </div>
             <div className="flex items-center gap-4">
               <Avatar className="hidden h-9 w-9 sm:flex">
-                <AvatarImage src="/avatars/05.png" alt="Avatar" />
+                {/* <AvatarImage src="/avatars/05.png" alt="Avatar" /> */}
                 <AvatarFallback>SD</AvatarFallback>
               </Avatar>
               <div className="grid gap-1">

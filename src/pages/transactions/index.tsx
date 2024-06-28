@@ -1,4 +1,4 @@
-import { DashBoardLayout } from "#srclayouts/dashboard/layout.tsx";
+import { DashBoardLayout } from "@/layouts/dashboard/layout";
 import {
   Table,
   TableBody,
@@ -25,9 +25,9 @@ import {
   Search,
   Users,
 } from "lucide-react";
-import { Button } from "#srccomponents/ui/button.tsx";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Badge } from "#srccomponents/ui/badge.tsx";
+import { Badge } from "@/components/ui/badge";
 const Page = () => {
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">

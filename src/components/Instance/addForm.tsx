@@ -22,9 +22,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { useAuth } from "#srchooks/use-auth.ts";
+import { useAuth } from "@/hooks/use-auth";
 import toast, { Toaster } from "react-hot-toast";
-import { createinstance } from "#srcservices/instanceRequest.ts";
 
 const AddInstanceForm = () => {
   const auth = useAuth() as any;
@@ -46,17 +45,14 @@ const AddInstanceForm = () => {
     try {
       if (auth.isLoading != true) {
         auth.setIsLoading(true);
-        toast.promise(
-          createinstance({
-            data: { name: values.name, orgId: auth.organizationData._id },
-            token: auth.token,
-          }),
-          {
-            loading: "Loading...",
-            success: (data: any) => <b>{data}</b>,
-            error: (err: any) => <b>{err}</b>,
-          }
-        );
+        // toast.promise(
+        //   createinstance({ name: values.name, orgId: auth.organizationData._id }),
+        //   {
+        //     loading: "Loading...",
+        //     success: (data: any) => <b>{data}</b>,
+        //     error: (err: any) => <b>{err}</b>,
+        //   }
+        // );
         auth.setIsLoading(false);
       }
     } catch (err) {

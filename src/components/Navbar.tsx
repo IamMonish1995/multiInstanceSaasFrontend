@@ -19,7 +19,6 @@ import { LogoIcon } from "./Icons";
 import { ModeToggle } from "./theme-toggle-btn";
 import Link from "next/link";
 import { SignInButton, SignedOut, useUser } from "@clerk/nextjs";
-import { useAuth } from "#srchooks/use-auth.ts";
 
 interface RouteProps {
   href: string;
@@ -47,22 +46,17 @@ const routeList: RouteProps[] = [
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const auth = useAuth() as any;
-  useEffect(() => {
-    let tempAuth = window.sessionStorage.getItem("token") != null;
-    if (window) {
-      auth.setIsAuthenticated(tempAuth);
-    }
-  }, []);
+  const { isSignedIn } = useUser();
+
 
   return (
-    <header className="sticky border-b-[1px] top-0 z-40 w-full bg-white dark:border-b-slate-700 dark:bg-background">
+    <div className="sticky border-b-[1px] top-0 z-40 w-full bg-white dark:border-b-slate-700 dark:bg-background">
       <NavigationMenu className="mx-auto">
         <NavigationMenuList className="container h-14 px-4 w-screen flex justify-between ">
           <NavigationMenuItem className="font-bold flex">
             <Link href="/" className="ml-2 font-bold text-xl flex">
               <LogoIcon />
-              Multi Instance SaaS
+              {process.env.NEXT_PUBLIC_APP_NAME}
             </Link>
           </NavigationMenuItem>
 
@@ -75,9 +69,7 @@ export const Navbar = () => {
                 <Menu
                   className="flex md:hidden h-5 w-5"
                   onClick={() => setIsOpen(true)}
-                >
-                  {/* <span className="sr-only">Menu Icon</span> */}
-                </Menu>
+                ></Menu>
               </SheetTrigger>
 
               <SheetContent side={"left"}>
@@ -97,7 +89,7 @@ export const Navbar = () => {
                       {label}
                     </Link>
                   ))}
-                  {auth.isAuthenticated ? (
+                  {isSignedIn ? (
                     <>
                       <Link
                         href="/dashboard"
@@ -146,7 +138,7 @@ export const Navbar = () => {
           </nav>
 
           <div className="hidden md:flex gap-2">
-            {auth.isAuthenticated ? (
+            {isSignedIn ? (
               <Link
                 href="/dashboard"
                 className={`border ${buttonVariants({ variant: "secondary" })}`}
@@ -172,6 +164,6 @@ export const Navbar = () => {
           </div>
         </NavigationMenuList>
       </NavigationMenu>
-    </header>
+    </div>
   );
 };

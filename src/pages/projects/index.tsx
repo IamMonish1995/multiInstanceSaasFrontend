@@ -1,10 +1,10 @@
-import { Button } from "#srccomponents/ui/button.tsx";
-import { DashBoardLayout } from "#srclayouts/dashboard/layout.tsx";
+import { Button } from "@/components/ui/button";
+import { DashBoardLayout } from "@/layouts/dashboard/layout";
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import TopPageNavigation from "#srccomponents/TopPageNavigation.tsx";
-import AddItemDialogue from "#srccomponents/AddItemDialogue.tsx";
-import AddInstanceForm from "#srccomponents/Instance/addForm.tsx";
+import TopPageNavigation from "@/components/TopPageNavigation";
+import AddItemDialogue from "@/components/AddItemDialogue";
+import AddInstanceForm from "@/components/Instance/addForm";
 const Page = () => {
   const [Instances, setInstances] = useState([1, 2, 2, 2]);
   const [AddModalShow, setAddModalShow] = useState(false);

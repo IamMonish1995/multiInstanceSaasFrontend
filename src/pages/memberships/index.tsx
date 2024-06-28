@@ -1,5 +1,5 @@
-import { Pricing } from "#srccomponents/Pricing.tsx";
-import { DashBoardLayout } from "#srclayouts/dashboard/layout.tsx";
+import { Pricing } from "@/components/Pricing";
+import { DashBoardLayout } from "@/layouts/dashboard/layout";
 
 const Page = () => {
   return (

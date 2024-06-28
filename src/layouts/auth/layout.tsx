@@ -1,3 +1,4 @@
+import useStorage from "@/hooks/useStorage";
 import { usePathname, useRouter } from "next/navigation";
 import PropTypes from "prop-types";
 import { useEffect, useRef, useState } from "react";
@@ -8,6 +9,7 @@ export const AuthLayout = (props: any) => {
   const pathname = usePathname();
   const router = useRouter();
   const ignore = useRef(false);
+  const { token } = useStorage();
 
   useEffect(() => {
     // Prevent from calling twice in development mode with React.StrictMode enabled
@@ -17,9 +19,7 @@ export const AuthLayout = (props: any) => {
         return;
       }
       ignore.current = true;
-      let isAuthenticated =
-        window.sessionStorage.getItem("token") != null;
-      if (isAuthenticated) {
+      if (token) {
         console.log("authenticated, redirecting");
         router.push("/dashboard");
       }

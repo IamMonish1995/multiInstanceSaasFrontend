@@ -35,7 +35,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { ModeToggle } from "@/components/theme-toggle-btn";
-import { useAuth } from "#srchooks/use-auth.ts";
+import { useAuth } from "@/hooks/use-auth";
 import { usePathname, useRouter } from "next/navigation";
 import { SignedIn, UserButton } from "@clerk/nextjs";
 
@@ -54,7 +54,7 @@ const AppHeader = ({
     { label: "Instances", path: "/instances", icon: FolderKanban },
     { label: "Memberships", path: "/memberships", icon: ShoppingCart },
     { label: "Transactions", path: "/transactions", icon: ArrowRightLeft },
-  ];
+    ];
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-muted/40 md:block">
@@ -63,7 +63,7 @@ const AppHeader = ({
             <Link href="/" className="flex items-center gap-2 font-semibold">
               <Package2 className="h-6 w-6" />
               <span className="">
-                {auth.organizationData?.organizationname}
+                {process.env.NEXT_PUBLIC_APP_NAME}
               </span>
             </Link>
             {/* <Button variant="outline" size="icon" className="ml-auto h-8 w-8">

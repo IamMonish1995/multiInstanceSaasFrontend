@@ -22,8 +22,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { useAuth } from "#srchooks/use-auth.ts";
-import { AuthLayout } from "#srclayouts/auth/layout.tsx";
+import { useAuth } from "@/hooks/use-auth";
+import { AuthLayout } from "@/layouts/auth/layout";
 import toast, { Toaster } from "react-hot-toast";
 
 const Page = () => {

@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { AuthLayout } from "#srclayouts/auth/layout.tsx";
+import { AuthLayout } from "@/layouts/auth/layout";
 
 const Page = () => {
   return (

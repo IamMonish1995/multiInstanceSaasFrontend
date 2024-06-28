@@ -1,18 +1,18 @@
-import { About } from "#srccomponents/About.tsx";
-import { Cta } from "#srccomponents/Cta.tsx";
-import { FAQ } from "#srccomponents/FAQ.tsx";
-import { Features } from "#srccomponents/Features.tsx";
-import { Footer } from "#srccomponents/Footer.tsx";
-import { Hero } from "#srccomponents/Hero.tsx";
-import { HowItWorks } from "#srccomponents/HowItWorks.tsx";
-import { Navbar } from "#srccomponents/Navbar.tsx";
-import { Newsletter } from "#srccomponents/Newsletter.tsx";
-import { Pricing } from "#srccomponents/Pricing.tsx";
-import { ScrollToTop } from "#srccomponents/ScrollToTop.tsx";
-import { Services } from "#srccomponents/Services.tsx";
-import { Sponsors } from "#srccomponents/Sponsors.tsx";
-import { Team } from "#srccomponents/Team.tsx";
-import { Testimonials } from "#srccomponents/Testimonials.tsx";
+import { About } from "@/components/About";
+import { Cta } from "@/components/Cta";
+import { FAQ } from "@/components/FAQ";
+import { Features } from "@/components/Features";
+import { Footer } from "@/components/Footer";
+import { Hero } from "@/components/Hero";
+import { HowItWorks } from "@/components/HowItWorks";
+import { Navbar } from "@/components/Navbar";
+import { Newsletter } from "@/components/Newsletter";
+import { Pricing } from "@/components/Pricing";
+import { ScrollToTop } from "@/components/ScrollToTop";
+import { Services } from "@/components/Services";
+import { Sponsors } from "@/components/Sponsors";
+import { Team } from "@/components/Team";
+import { Testimonials } from "@/components/Testimonials";
 
 export default function Page() {
   return (
