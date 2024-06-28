@@ -16,17 +16,23 @@ export const AuthProvider = (props: any) => {
   const { token, setToken, clearAll } = useStorage();
 
   const { isSignedIn, user } = useUser();
+  console.log({user});
+  
   const initialize = async () => {
     if (isSignedIn && user && !token) {
       try {
         if (isLoading != true) {
           setIsLoading(true);
-         await toast.promise(signIn("monishbarse9@gmail.com", "abcdefg"), {
-            loading: "Loading...",
-            success: (data: any) => <b>{data}</b>,
-            error: (err: any) => <b>{err}</b>,
-          });
-          setIsLoading(false);
+          signIn("monishbarse9@gmail.com", "abcdefg")
+            .then((res) => {
+              console.log({ res });
+            })
+            .catch((err) => {
+              console.log({ err });
+            })
+            .finally(() => {
+              setIsLoading(false);
+            });
         }
       } catch (err) {
         setIsLoading(false);
@@ -64,8 +70,11 @@ export const AuthProvider = (props: any) => {
         //   console.log(err);
         //   reject(err);
         // });
+
+        setTimeout(() => {
           setToken("abcd");
           resolve("Success");
+        }, 3000);
       } catch (err) {
         console.error(err);
         reject("Failed");
