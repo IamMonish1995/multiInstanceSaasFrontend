@@ -8,26 +8,6 @@ export function cn(...inputs: ClassValue[]) {
 
 import CryptoJS from "crypto-js";
 
-// Encrypt JSON object
-// export function encryptJSON(obj: any) {
-//   let key = process.env.JWT_SECRET_KEY as string;
-//   const jsonString = JSON.stringify(obj);
-//   const ciphertext = CryptoJS.AES.encrypt(jsonString, key).toString();
-//   return ciphertext;
-// }
-
-// // Decrypt JSON object
-// export function decryptJSON(ciphertext: any,key:any) {
-//   let decryptedObj = null;
-//   if (key) {
-//     const bytes = CryptoJS.AES.decrypt(ciphertext, key);
-//     const decryptedString = bytes.toString(CryptoJS.enc.Utf8);
-//     decryptedObj = JSON.parse(decryptedString);
-//   }
-//   return decryptedObj;
-// }
-
-
 export function encryptJSON(obj:any) {
   return new Promise((resolve, reject) => {
     try {
@@ -105,7 +85,7 @@ export const getDefaultProfile = (userProfiles: { systemProfiles: any[]; organiz
 
   // Log the selected profile if debugging is needed
   if (selectedProfile) {
-    console.log({selectedProfile});
+    // console.log({selectedProfile});
   } else {
     console.log("No suitable profile found.");
   }
@@ -113,16 +93,20 @@ export const getDefaultProfile = (userProfiles: { systemProfiles: any[]; organiz
   return selectedProfile;
 };
 
+export const getAccessForMenu = (menuAccessName:any,accessList:any) => {  
+  let accessObject = {
+    "can_create": false,
+    "can_read": false,
+    "can_update": false,
+    "can_delete": false
+} 
+   const index = accessList?.findIndex((item:any)=>item.menu_id.menu_name === menuAccessName)
+   if(index !== -1){
+       accessObject = accessList[index]
+   }
 
-
-
-
-
-
-
-
-
-
+return accessObject
+}
 
 
 export const decodeToken = (token:any)=>{

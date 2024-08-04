@@ -1,11 +1,17 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { login, getProfileConfig } from "@/services/authRequest";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import toast from "react-hot-toast";
 import useStorage from "@/hooks/useStorage";
-import { decodeToken, decryptJSON, encryptJSON, getDefaultProfile } from "@/lib/utils";
+import {
+  decodeToken,
+  decryptJSON,
+  encryptJSON,
+  getAccessForMenu,
+  getDefaultProfile,
+} from "@/lib/utils";
 
 export const AuthContext = createContext({ undefined });
 
@@ -13,6 +19,7 @@ export const AuthProvider = (props: any) => {
   const router = useRouter();
   const { children } = props;
   const [isLoading, setIsLoading] = useState(false);
+  const [accessList, setAccessList] = useState([]);
   const {
     token,
     setToken,
@@ -21,12 +28,12 @@ export const AuthProvider = (props: any) => {
     selectedProfile,
     setSelectedProfile,
     ProfileConfig,
-    setProfileConfig
+    setProfileConfig,
   } = useStorage();
 
   const { isSignedIn, user } = useUser();
 
-  const initialize = async () => {
+  const initialize = useCallback(async () => {
     if (isSignedIn && user && !token) {
       try {
         if (isLoading != true) {
@@ -35,9 +42,9 @@ export const AuthProvider = (props: any) => {
             .then((res: any) => {
               // selecting default profile
               if (!selectedProfile) {
-                const defaultProfile = getDefaultProfile(res.userProfiles)
-                setSelectedProfile(defaultProfile)
-                getConfig(defaultProfile.role_id._id)
+                const defaultProfile = getDefaultProfile(res.userProfiles);
+                setSelectedProfile(defaultProfile);
+                getConfig(defaultProfile.role_id._id);
               }
             })
             .catch((err) => {
@@ -56,7 +63,7 @@ export const AuthProvider = (props: any) => {
         signOut();
       }
     }
-  };
+  },[isSignedIn,user]);
 
   useEffect(() => {
     initialize();
@@ -102,7 +109,8 @@ export const AuthProvider = (props: any) => {
           })
             .then((res) => {
               if (res.status == "success") {
-                 setProfileConfig(res.result);
+                setProfileConfig(res.result);
+                setAccessList(res.result);
                 resolve(res.result);
               } else {
                 reject(res.message);
@@ -120,6 +128,75 @@ export const AuthProvider = (props: any) => {
     });
   };
 
+  // set permission
+  let useraccess_screen;
+  let system_admin_dashboard;
+  let menus_screen;
+  let guest_dashboard;
+  let org_admin_dashboard;
+  let client_admin_dashboard;
+  let system_user_dashboard;
+  let org_user_dashboard;
+  let client_user_dashboard;
+  let org_screen;
+  let client_screen;
+  let project_screen;
+  let instance_screen;
+  let membership_screen;
+  let transactions;
+
+  if (accessList.length > 0) {
+    useraccess_screen = getAccessForMenu("useraccess_screen", accessList);
+    system_admin_dashboard = getAccessForMenu(
+      "system_admin_dashboard",
+      accessList
+    );
+    menus_screen = getAccessForMenu("menus_screen", accessList);
+    guest_dashboard = getAccessForMenu("guest_dashboard", accessList);
+    org_admin_dashboard = getAccessForMenu(
+      "org_admin_dashboard",
+      accessList
+    );
+    client_admin_dashboard = getAccessForMenu(
+      "client_admin_dashboard",
+      accessList
+    );
+    system_user_dashboard = getAccessForMenu(
+      "system_user_dashboard",
+      accessList
+    );
+    org_user_dashboard = getAccessForMenu("org_user_dashboard", accessList);
+    client_user_dashboard = getAccessForMenu(
+      "client_user_dashboard",
+      accessList
+    );
+    org_screen = getAccessForMenu("org_screen", accessList);
+    client_screen = getAccessForMenu("client_screen", accessList);
+    project_screen = getAccessForMenu("project_screen", accessList);
+    instance_screen = getAccessForMenu("instance_screen", accessList);
+    membership_screen = getAccessForMenu("membership_screen", accessList);
+    transactions = getAccessForMenu("transactions", accessList);
+  }
+
+  const permisstions = {
+    useraccess_screen,
+    system_admin_dashboard,
+    menus_screen,
+    guest_dashboard,
+    org_admin_dashboard,
+    client_admin_dashboard,
+    system_user_dashboard,
+    org_user_dashboard,
+    client_user_dashboard,
+    org_screen,
+    client_screen,
+    project_screen,
+    instance_screen,
+    membership_screen,
+    transactions,
+  }
+
+
   const signOut = () => {
     logOut();
   };
@@ -131,8 +208,8 @@ export const AuthProvider = (props: any) => {
     signOut,
     getConfig,
     ProfileConfig,
-  };
-
+    permisstions
+  };  
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
