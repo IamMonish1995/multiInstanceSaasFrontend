@@ -65,8 +65,8 @@ const AppHeader = ({
         permisstions?.guest_dashboard?.can_read,
     },
     {
-      label: "UserAccess",
-      path: "/useraccess",
+      label: "Roles",
+      path: "/roles",
       icon: ScanEye,
       permission: permisstions?.useraccess_screen?.can_read,
     },

@@ -5,7 +5,7 @@ let MAIN_URL = process.env.NEXT_PUBLIC_BACKEND_API;
 export const GET = async (endPoint: string, params: any) => {
   const { token } = useStorage();
   try {
-    const res = await axios.post(`${MAIN_URL}/${endPoint}`, {
+    const res = await axios.get(`${MAIN_URL}/${endPoint}`, {
       params: params,
       headers: {
           Authorization: "Bearer " + token,

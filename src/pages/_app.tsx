@@ -23,7 +23,7 @@ export default function App({ Component, pageProps }: any) {
       enableSystem
       disableTransitionOnChange
     >
-      <ClerkProvider appearance={{ baseTheme: dark }}>
+      <ClerkProvider >
         <div className={inter.className}>
           <Toaster />
           <AuthProvider>

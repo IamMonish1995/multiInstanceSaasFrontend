@@ -25,7 +25,7 @@ import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/use-auth";
 import toast, { Toaster } from "react-hot-toast";
 
-const AddInstanceForm = () => {
+const AddInstanceForm = ({data = "placeholder"}:any) => {
   const auth = useAuth() as any;
   const formSchema = z.object({
     name: z.string().min(4, {
@@ -74,7 +74,7 @@ const AddInstanceForm = () => {
                     <FormItem>
                       <FormLabel>Name</FormLabel>
                       <FormControl>
-                        <Input placeholder="shadcn" {...field} />
+                        <Input placeholder={data} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
