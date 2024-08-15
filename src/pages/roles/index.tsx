@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import TopPageNavigation from "@/components/TopPageNavigation";
 import DialogueComponent from "@/components/DialogueComponent";
 import RolesForm from "@/components/Roles/roleForm";
-import  RoleList  from "@/components/Roles/rolesList";
-import { getAllRoles } from "@/services/authRequest";
+import RoleList from "@/components/Roles/rolesList";
+import { deleteRole, getAllRoles } from "@/services/authRequest";
 const Page = () => {
   const [Roles, setRoles] = useState([]);
   const [AddModalShow, setAddModalShow] = useState(false);
@@ -16,25 +16,37 @@ const Page = () => {
   const handleAddBtn = () => {
     setAddModalShow(true);
   };
-  const handleEditBtn = (role:any) => {
-    setSelectedRole(role)
+  const handleEditBtn = (role: any) => {
+    setSelectedRole(role);
     setEditModalShow(true);
   };
-  const handleDeleteBtn = (role:any) => {
-    setSelectedRole(role)
-    setDeleteModalShow(true);
+  const handleDeleteBtn = (role: any) => {
+    setSelectedRole(role);
+    deleteRole({ role_id: role._id }).then(() => {
+      fetchAllRoles();
+    });
+
+    // setDeleteModalShow(true);
   };
   const handleExportBtn = () => {
     alert("Export Button Clicked");
   };
+  const fetchAllRoles = () => {
+    getAllRoles({}).then((res) => {
+      setRoles(res.result);
+    });
+  };
+  useEffect(() => {
+    fetchAllRoles();
+  }, []);
 
-  useEffect(()=>{
-    getAllRoles({}).then((res)=>{
-      setRoles(res.result)
-    })
-  },[])
-
-  const AllContent = () => <RoleList Roles={Roles} handleEditBtn={handleEditBtn} handleDeleteBtn={handleDeleteBtn}/>;
+  const AllContent = () => (
+    <RoleList
+      Roles={Roles}
+      handleEditBtn={handleEditBtn}
+      handleDeleteBtn={handleDeleteBtn}
+    />
+  );
   const tabs = [
     { label: "All", value: "all", content: <AllContent /> },
     // { label: "Active", value: "active", content: <AllContent /> },
@@ -49,17 +61,42 @@ const Page = () => {
       <DialogueComponent
         open={AddModalShow}
         setIsOpen={setAddModalShow}
-        content={<RolesForm />}
+        content={
+          <RolesForm
+            fetchAllRoles={fetchAllRoles}
+            handleClose={() => {
+              setAddModalShow(false);
+            }}
+          />
+        }
       />
       <DialogueComponent
         open={EditModalShow}
         setIsOpen={setEditModalShow}
-        content={<RolesForm SelectedRole={SelectedRole} setSelectedRole={setSelectedRole}/>}
+        content={
+          <RolesForm
+            fetchAllRoles={fetchAllRoles}
+            handleClose={() => {
+              setEditModalShow(false);
+            }}
+            SelectedRole={SelectedRole}
+            setSelectedRole={setSelectedRole}
+          />
+        }
       />
       <DialogueComponent
         open={DeleteModalShow}
         setIsOpen={setDeleteModalShow}
-        content={<RolesForm SelectedRole={SelectedRole} setSelectedRole={setSelectedRole}/>}
+        content={
+          <RolesForm
+            fetchAllRoles={fetchAllRoles}
+            handleClose={() => {
+              setDeleteModalShow(false);
+            }}
+            SelectedRole={SelectedRole}
+            setSelectedRole={setSelectedRole}
+          />
+        }
       />
       {Roles && Roles.length == 0 ? (
         <div

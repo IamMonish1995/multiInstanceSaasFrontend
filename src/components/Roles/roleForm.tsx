@@ -25,7 +25,12 @@ import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/use-auth";
 import toast, { Toaster } from "react-hot-toast";
 import { useEffect, useReducer, useState } from "react";
-import { getAllMenus, getProfileConfig } from "@/services/authRequest";
+import {
+  getAllMenus,
+  getProfileConfig,
+  saveNewRole,
+  updateRole,
+} from "@/services/authRequest";
 import {
   Table,
   TableBody,
@@ -37,7 +42,7 @@ import {
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { encryptJSON } from "@/lib/utils";
 
-const RolesForm = ({ SelectedRole = null, setSelectedRole = null }: any) => {
+const RolesForm = ({ SelectedRole = null, handleClose = () => {},fetchAllRoles=()=>{} }: any) => {
   const [assessList, setAccessList] = useState([]) as any;
   const [menus, setMenus] = useState([]) as any;
   const [selectAllCheckBox, setSelectAllCheckBox] = useState(false);
@@ -45,10 +50,7 @@ const RolesForm = ({ SelectedRole = null, setSelectedRole = null }: any) => {
   const [editColCheckBox, setEditColCheckBox] = useState(false);
   const [deleteColCheckBox, setDeleteColCheckBox] = useState(false);
   const [viewColCheckBox, setViewColCheckBox] = useState(false);
-  const [, forceUpdate] = useReducer((x: any) => x + 1, 0);
-
-  console.log({ SelectedRole });
-
+  const [, forceUpdate] = useReducer((x: any) => x + 1, 0);  
   const auth = useAuth() as any;
   const formSchema = z.object({
     name: z.string().min(4, {
@@ -59,7 +61,7 @@ const RolesForm = ({ SelectedRole = null, setSelectedRole = null }: any) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
+      name: SelectedRole?.role_name || "",
     },
   });
 
@@ -68,18 +70,27 @@ const RolesForm = ({ SelectedRole = null, setSelectedRole = null }: any) => {
     try {
       if (auth.isLoading != true) {
         auth.setIsLoading(true);
-        console.log({ values, assessList });
-        // toast.promise(
-        //   createRoles({ name: values.name, orgId: auth.organizationData._id }),
-        //   {
-        //     loading: "Loading...",
-        //     success: (data: any) => <b>{data}</b>,
-        //     error: (err: any) => <b>{err}</b>,
-        //   }
-        // );
+        if (SelectedRole) {
+        await  toast.promise(updateRole({role_id:SelectedRole._id,name: values.name,assessList}), {
+            loading: "Loading...",
+            success: "Data Updated",
+            error: "Something went wrong",
+          });
+        }else{
+         await toast.promise(saveNewRole({ name: values.name, assessList }), {
+            loading: "Loading...",
+            success: "Data Saved",
+            error: "Something went wrong",
+          });
+        }
+        
+        handleClose()
+        fetchAllRoles()
         auth.setIsLoading(false);
       }
     } catch (err) {
+      handleClose()
+      fetchAllRoles()
       auth.setIsLoading(false);
       console.log(err);
     }
@@ -150,7 +161,12 @@ const RolesForm = ({ SelectedRole = null, setSelectedRole = null }: any) => {
         })
           .then((res) => {
             if (res.status == "success") {
-              setAccessList(res.result);
+              let tempArray = res.result.map((TempAccess:any)=>{
+                return {...TempAccess,menu_id:TempAccess.menu_id._id,role_id:SelectedRole._id}
+              })
+              console.log({tempArray});
+              
+              setAccessList(tempArray);
               checkCheckBoxStatus();
             }
           })
@@ -199,8 +215,7 @@ const RolesForm = ({ SelectedRole = null, setSelectedRole = null }: any) => {
         [Action]: Value,
       };
       tempArray = [...tempArray, tempData];
-    }
-
+    }    
     setAccessList(tempArray);
     forceUpdate();
     checkCheckBoxStatus();
@@ -332,12 +347,10 @@ const RolesForm = ({ SelectedRole = null, setSelectedRole = null }: any) => {
                 className="space-y-8"
               >
                 <div className="grid gap-4 text-center">
-                  {SelectedRole?.role_name ? (
-                    <>{SelectedRole.role_name}</>
-                  ) : (
                     <FormField
                       control={form.control}
                       name="name"
+                      defaultValue={SelectedRole?.role_name || ""}
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Name</FormLabel>
@@ -348,7 +361,6 @@ const RolesForm = ({ SelectedRole = null, setSelectedRole = null }: any) => {
                         </FormItem>
                       )}
                     />
-                  )}
                 </div>
                 <div style={{ display: "flex", justifyContent: "center" }}>
                   <Table>
@@ -366,8 +378,7 @@ const RolesForm = ({ SelectedRole = null, setSelectedRole = null }: any) => {
                         const permission = assessList?.find((access: any) => {
                           if (SelectedRole) {
                             if (
-                              access?.menu_id?._id === menu._id &&
-                              access?.role_id?._id === SelectedRole._id
+                              access?.menu_id === menu._id
                             ) {
                               return true;
                             } else {
@@ -438,10 +449,18 @@ const RolesForm = ({ SelectedRole = null, setSelectedRole = null }: any) => {
                     </TableBody>
                   </Table>
                 </div>
-
-                <Button type="submit" className="w-full">
-                  Save
-                </Button>
+                <div className="flex justify-around">
+                  <Button
+                    onClick={handleClose}
+                    variant="destructive"
+                    className="w-auto"
+                  >
+                    cancel
+                  </Button>
+                  <Button type="submit" className="w-auto">
+                    Save
+                  </Button>
+                </div>
               </form>
             </Form>
           </div>
