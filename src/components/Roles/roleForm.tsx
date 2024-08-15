@@ -25,7 +25,7 @@ import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/use-auth";
 import toast, { Toaster } from "react-hot-toast";
 import { useEffect, useReducer, useState } from "react";
-import { getAllMenus } from "@/services/authRequest";
+import { getAllMenus, getProfileConfig } from "@/services/authRequest";
 import {
   Table,
   TableBody,
@@ -35,6 +35,7 @@ import {
   TableRow,
 } from "../ui/table";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
+import { encryptJSON } from "@/lib/utils";
 
 const RolesForm = ({ SelectedRole = null, setSelectedRole = null }: any) => {
   const [assessList, setAccessList] = useState([]) as any;
@@ -136,19 +137,35 @@ const RolesForm = ({ SelectedRole = null, setSelectedRole = null }: any) => {
     can_read: viewColCheckBox,
   } as any;
 
-  const getAccessList = () => {
+  const getAllMenuList = () => {
     getAllMenus(null).then((response) => {
       setMenus(response.result);
     });
+  };
+  const getAccessListForUserType = () => {
     if (SelectedRole) {
-      // AccessListByUserType(user.ID).then((res) => {
-      //   setAccessList(res);
-      //   checkCheckBoxStatus()
-      // });
+      encryptJSON(SelectedRole._id).then((encryptedroleId) => {
+        getProfileConfig({
+          external_role_id: encryptedroleId,
+        })
+          .then((res) => {
+            if (res.status == "success") {
+              setAccessList(res.result);
+              checkCheckBoxStatus();
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      });
     }
   };
   useEffect(() => {
-    getAccessList();
+    getAllMenuList();
+  }, []);
+
+  useEffect(() => {
+    getAccessListForUserType();
   }, [SelectedRole]);
 
   const handleCheck = (Action: any, Value: any, MenuID: any) => {
@@ -345,12 +362,12 @@ const RolesForm = ({ SelectedRole = null, setSelectedRole = null }: any) => {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {menus?.map((res: any, index: number) => {
-                        const permission = assessList?.find((item: any) => {
+                      {menus?.map((menu: any, index: number) => {
+                        const permission = assessList?.find((access: any) => {
                           if (SelectedRole) {
                             if (
-                              item.menu_id === res._id &&
-                              item.role_id === SelectedRole._id
+                              access?.menu_id?._id === menu._id &&
+                              access?.role_id?._id === SelectedRole._id
                             ) {
                               return true;
                             } else {
@@ -362,7 +379,7 @@ const RolesForm = ({ SelectedRole = null, setSelectedRole = null }: any) => {
                         });
                         return (
                           <TableRow key={index}>
-                            <TableCell>{res.menu_name}</TableCell>
+                            <TableCell>{menu.menu_name}</TableCell>
                             <TableCell>
                               <input
                                 type="checkbox"
@@ -371,7 +388,7 @@ const RolesForm = ({ SelectedRole = null, setSelectedRole = null }: any) => {
                                   handleCheck(
                                     "can_create",
                                     e.target.checked,
-                                    res._id
+                                    menu._id
                                   );
                                 }}
                               />
@@ -384,7 +401,7 @@ const RolesForm = ({ SelectedRole = null, setSelectedRole = null }: any) => {
                                   handleCheck(
                                     "can_update",
                                     e.target.checked,
-                                    res._id
+                                    menu._id
                                   );
                                 }}
                               />
@@ -397,7 +414,7 @@ const RolesForm = ({ SelectedRole = null, setSelectedRole = null }: any) => {
                                   handleCheck(
                                     "can_delete",
                                     e.target.checked,
-                                    res._id
+                                    menu._id
                                   );
                                 }}
                               />
@@ -410,7 +427,7 @@ const RolesForm = ({ SelectedRole = null, setSelectedRole = null }: any) => {
                                   handleCheck(
                                     "can_read",
                                     e.target.checked,
-                                    res._id
+                                    menu._id
                                   );
                                 }}
                               />
